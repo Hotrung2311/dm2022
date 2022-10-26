@@ -3,9 +3,29 @@ import math
 import string
 
 
+def tf(w, doc):
+    ret = 0
+    for d in doc:
+        if w == d:
+            ret += 1
+    return ret / len(doc)
+
+
+def idf(w, docs):
+    ret = 0
+    for doc in docs:
+        for d in doc:
+            if w == d:
+                ret += 1
+    return math.log(len(docs)/ret)
+
+
+def tfidf(w, doc, docs):
+    return tf(w, doc) * idf(w, docs)
+
+
 def split_doc(doc):
-    x = doc.split()
-    print(x)
+    return doc.split()
 
 
 def remove_punctuation(doc):
@@ -18,14 +38,18 @@ with open('archive/yelp_academic_dataset_tip.json') as f:
         data.append(remove_punctuation(json.loads(line)['text']))
 
 
-def idf(dw, d):
-    df = dw / d
-    return math.log(1 / df)
-
-
-def tf(w, doc):
-    result = 0
+def dw(w, doc):
+    sum1 = 0
     for d in doc:
         if w == d:
-            result = result + 1
-    return result / len(doc)
+            sum1 = sum1 + 1
+    return sum1
+
+
+real_doc = []
+for dat in data:
+    real_doc.append(split_doc(remove_punctuation(dat)))
+
+
+for rd in real_doc:
+    print(tfidf(rd, real_doc, data))
