@@ -2,6 +2,9 @@ import json
 import math
 import string
 
+import math
+import string
+
 
 def tf(w, doc):
     ret = 0
@@ -17,7 +20,8 @@ def idf(w, docs):
         for d in doc:
             if w == d:
                 ret += 1
-    return math.log(len(docs)/ret)
+                break
+    return math.log(len(docs) / ret)
 
 
 def tfidf(w, doc, docs):
@@ -34,22 +38,12 @@ def remove_punctuation(doc):
 
 data = []
 with open('archive/yelp_academic_dataset_tip.json') as f:
+    i = 0
     for line in f:
-        data.append(remove_punctuation(json.loads(line)['text']))
+        if i < 5:
+            data.append(split_doc(remove_punctuation(json.loads(line)['text'])))
+            i += 1
 
-
-def dw(w, doc):
-    sum1 = 0
-    for d in doc:
-        if w == d:
-            sum1 = sum1 + 1
-    return sum1
-
-
-real_doc = []
-for dat in data:
-    real_doc.append(split_doc(remove_punctuation(dat)))
-
-
-for rd in real_doc:
-    print(tfidf(rd, real_doc, data))
+d_data = data[0]
+result = tfidf("Avengers", d_data, data)
+print(result)
