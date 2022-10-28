@@ -29,7 +29,6 @@ print(init_centroid(input_k, data))
 
 
 def min_distance(p, arr):
-    ret = 0
     tmp = []
     for a in arr:
         tmp.append(math.sqrt(pow(a - p, 2)))
@@ -37,9 +36,25 @@ def min_distance(p, arr):
     return ret
 
 
-cluster = [[] for i in range(input_k)]
-for rd in data:
-    for i in range(input_k):
-        if min_distance(rd, centroid[-1]) == i:
-            cluster[i].append(rd)
-print(cluster)
+def update_centroid(arr):
+    ret = []
+    for j in arr:
+        ret.append(sum(j)/len(j))
+    return ret
+
+
+cluster = [[] for ii in range(input_k)]
+temp = [[] for ii in range(input_k)]
+flag = 0
+while flag == 0:
+    for rd in data:
+        for i in range(input_k):
+            if min_distance(rd, centroid[-1]) == i:
+                cluster[i].append(rd)
+    print(cluster)
+    if temp != cluster:
+        temp = cluster
+    else:
+        flag = 1
+
+print(update_centroid(cluster))
