@@ -5,7 +5,7 @@ data = []
 with open('archive/yelp_academic_dataset_tip.json') as f:
     i = 0
     for line in f:
-        if i < 100:
+        if i < 1000:
             data.append(len(json.loads(line)['text']))
             i += 1
 
@@ -46,15 +46,18 @@ def update_centroid(arr):
 cluster = [[] for ii in range(input_k)]
 temp = [[] for ii in range(input_k)]
 flag = 0
+a = 0
 while flag == 0:
+    print(a)
     for rd in data:
         for i in range(input_k):
             if min_distance(rd, centroid[-1]) == i:
                 cluster[i].append(rd)
-    print(cluster)
     if temp != cluster:
         temp = cluster
+        centroid.append(update_centroid(cluster))
+        print(centroid[-1])
+        cluster = [[] for ii in range(input_k)]
+        a += 1
     else:
         flag = 1
-
-print(update_centroid(cluster))
